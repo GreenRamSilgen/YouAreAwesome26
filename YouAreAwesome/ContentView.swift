@@ -15,36 +15,40 @@ struct ContentView: View {
         VStack {
             Spacer()
             
-            Image(systemName: sysImg)
+            Image(sysImg)
                 .resizable()
                 .scaledToFit()
-                .foregroundStyle(.orange)
+                .clipShape(RoundedRectangle(cornerRadius: 30))
+                .shadow(radius: 30)
             Text(message)
                 .font(.largeTitle)
-                .fontWeight(.ultraLight)
+                .fontWeight(.heavy)
+                .foregroundStyle(.red)
             
             Spacer()
             
             HStack{
-                let message1 = "You Are Awesome!"
-                let message2 = "You Are Great!"
-                let imageString1 = "sun.max.fill"
-                let imageString2 = "hand.thumbsup"
+                let image0 = "image0"
+                let message0 = "You Are Awesome!"
+                let image1 = "image1"
+                let message1 = "You Are Greaet!"
+                let image2 = "image2"
+                let image3 = "image3"
+                let image4 = "image4"
+                let image5 = "image5"
+                let image6 = "image6"
+                let image7 = "image7"
+                let image8 = "image8"
+                let image9 = "image9"
                 
                 Button("Press Me!") {
-                    if message == message2 {
-                        message = message1
-                        sysImg = imageString1
-                    }
-                    else {
-                        message = message2
-                        sysImg = imageString2
-                    }
+                    message = message == message0 ? message1 : message0
+                    sysImg = sysImg == image1 ? image0 : image1
+                    
                 }
             }
             .buttonStyle(.borderedProminent)
             .font(.title2)
-            .tint(.orange)
         }
         .padding()
     }
