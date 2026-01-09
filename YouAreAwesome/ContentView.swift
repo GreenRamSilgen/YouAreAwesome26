@@ -17,6 +17,7 @@ struct ContentView: View {
     @State private var imageNumber : Int = -1
     @State private var soundNumber : Int = -1
     @State private var audioPlayer : AVAudioPlayer!
+    @State private var soundIsOn : Bool = true
     
     var body: some View {
         VStack {
@@ -72,18 +73,34 @@ struct ContentView: View {
                 let sound5 = "sound5"
                 let sounds = [ sound0, sound1, sound2, sound3, sound4, sound5]
                 
-                Button("Press Me!") {
-                    //TODO: - Update the imageName variable -
+                HStack {
+                    Text("Sound On:")
+                    Toggle("", isOn: $soundIsOn)
+                        .labelsHidden()
+                        .border(.blue)
+                        .onChange(of: soundIsOn) { oldValue, newValue in
+                            if audioPlayer != nil, audioPlayer.isPlaying {
+                                audioPlayer.stop()
+                            }
+                        }
                     
-                    messageNumber = nonRepeatingRandom(upperBound: numberOfImages-1, lastNumber: messageNumber)
-                    message = messages[messageNumber]
+                    Spacer()
                     
-                    imageNumber = nonRepeatingRandom(upperBound: numberOfImages-1, lastNumber: imageNumber)
-                    imageName = "image\(imageNumber)"
-                
-                    soundNumber = nonRepeatingRandom(upperBound: sounds.count, lastNumber: soundNumber)
-                    
-//                    playSound(soundName: "sound\(soundNumber)")
+                    Button("Press Me!") {
+                        //TODO: - Update the imageName variable -
+                        
+                        messageNumber = nonRepeatingRandom(upperBound: numberOfImages-1, lastNumber: messageNumber)
+                        message = messages[messageNumber]
+                        
+                        imageNumber = nonRepeatingRandom(upperBound: numberOfImages-1, lastNumber: imageNumber)
+                        imageName = "image\(imageNumber)"
+                        
+                        soundNumber = nonRepeatingRandom(upperBound: sounds.count, lastNumber: soundNumber)
+                        
+                        if soundIsOn {
+                            playSound(soundName: "sound\(soundNumber)")
+                        }
+                    }
                 }
             }
             .buttonStyle(.borderedProminent)
@@ -97,7 +114,9 @@ struct ContentView: View {
             print("😡 Failed to create sound file")
             return
         }
-        
+        if audioPlayer != nil, audioPlayer.isPlaying {
+            audioPlayer.stop()
+        }
         do {
             audioPlayer = try AVAudioPlayer(data: soundFile.data)
             audioPlayer.play()
